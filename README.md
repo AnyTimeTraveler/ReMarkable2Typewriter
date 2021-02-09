@@ -4,7 +4,7 @@
 ## What's this?
 It's a tiny (40k!) extension which turns keyboard input into text, drawn onto the screen **in the existing reMarkable environment** by mimicking stylus motion.
 
-![Crazy Cow demo page](notes/demo1.jpg)
+![Crazy Cow demo page](legacy/notes/demo1.jpg)
 
 *(Most of these features got done, yay. Notice the hand-corrected letters, the text recognotion works on that too!)*
 

@@ -110,7 +110,7 @@ const int8_t* get_font_char(const char* font_name, char ascii_value, int& out_nu
 {
     if (1 || !strcmp(font_name, "hershey"))
     {
-        if (ascii_value >= 32 || ascii_value <= 126)
+        if (ascii_value >= 32 && ascii_value <= 126)
         {
             const int8_t* char_data = hershey_font_simplex_compact[ascii_value - 32];
             out_num_verts = char_data[0];
