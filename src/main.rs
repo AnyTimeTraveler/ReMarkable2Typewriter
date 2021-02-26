@@ -2,7 +2,8 @@
 extern crate lazy_static;
 
 use evdev::Device;
-use keyboard::{KeyEvent,Keyboard};
+
+use keyboard::{Keyboard, KeyEvent};
 
 mod hershey_font;
 mod devices;
@@ -16,14 +17,13 @@ fn main() {
 
     let path = String::from("/dev/input/by-path/pci-0000:02:00.0-usb-0:2.2:1.0-event-kbd");
     // let path = find_keyboard();
-    let mut device = Device::open(&path).unwrap();
+    let device = Device::open(&path).unwrap();
     let mut keyboard = Keyboard::with_device(device);
 
     loop {
-        let events = keyboard.get_events();
-
-        for event in events {
-            handle_event(event);
+        while let Some(event) = keyboard.next() {
+            println!("Key: {}", event);
+            // handle_event(event);
         }
     }
 }

@@ -2,7 +2,6 @@ use std::time::{SystemTime, Duration};
 
 use evdev;
 use input_linux::sys::*;
-use crate::hershey_font::HERSHEY_FONT_SIMPLEX_COMPACT;
 use std::thread::sleep;
 
 struct Wacom(Vec<evdev::raw::input_event>);
@@ -10,7 +9,7 @@ struct Wacom(Vec<evdev::raw::input_event>);
 impl Wacom {
 
     fn put_char(c: char){
-
+    // draw character here
     }
 
     fn press_ui_button(&mut self, x: i32, y: i32) {
