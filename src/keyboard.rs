@@ -1,10 +1,12 @@
 use core::mem;
 use std::collections::VecDeque;
+use std::thread::sleep;
+use std::time::Duration;
 
 use evdev;
 use evdev::Key;
-use std::thread::sleep;
-use std::time::Duration;
+
+use crate::keyboard::KeyTyped::Letter;
 
 const UNDO_BUTTON_POS: (u32, u32) = (50, 12100);
 
@@ -28,6 +30,23 @@ enum KeyAction {
     Press,
     Release,
     Hold,
+}
+
+#[derive(Debug)]
+pub(crate) struct Modifiers {
+    ctrl: bool,
+    alt: bool,
+    meta: bool,
+}
+
+#[derive(Debug)]
+pub(crate) enum KeyTyped {
+    Letter((Modifiers, char)),
+    Backspace,
+    Left,
+    Right,
+    Up,
+    Down,
 }
 
 impl Keyboard {
@@ -67,7 +86,7 @@ impl Keyboard {
 }
 
 impl Iterator for Keyboard {
-    type Item = char;
+    type Item = KeyTyped;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -89,10 +108,20 @@ impl Iterator for Keyboard {
                     Key::KEY_CAPSLOCK => if event.action == KeyAction::Release { self.caps_lock_active = !self.caps_lock_active },
                     Key::KEY_NUMLOCK => {}
                     Key::KEY_SCROLLLOCK => {}
+                    Key::KEY_BACKSPACE => if pressed { return Some(KeyTyped::Backspace); },
+                    Key::KEY_LEFT => if pressed { return Some(KeyTyped::Left); },
+                    Key::KEY_RIGHT => if pressed { return Some(KeyTyped::Right); },
+                    Key::KEY_UP => if pressed { return Some(KeyTyped::Up); },
+                    Key::KEY_DOWN => if pressed { return Some(KeyTyped::Down); },
                     code => {
                         if pressed {
                             let capital = self.shift_pressed ^ self.caps_lock_active;
-                            return Some(
+                            return Some(Letter((
+                                Modifiers {
+                                    ctrl: self.ctrl_pressed,
+                                    alt: self.alt_pressed,
+                                    meta: self.win_pressed,
+                                },
                                 match code {
                                     Key::KEY_A => if capital { 'A' } else { 'a' },
                                     Key::KEY_B => if capital { 'B' } else { 'b' },
@@ -141,14 +170,14 @@ impl Iterator for Keyboard {
                                     Key::KEY_BACKSLASH => if capital { '|' } else { '\\' },
                                     Key::KEY_MINUS => if capital { '_' } else { '-' },
                                     Key::KEY_EQUAL => if capital { '+' } else { '=' },
-                                    Key::KEY_GRAVE =>  if capital {'~'} else {'`'},
-                                    Key::KEY_BACKSPACE =>  '\0',
+                                    Key::KEY_GRAVE => if capital { '~' } else { '`' },
+                                    Key::KEY_ENTER => '\n',
                                     id => {
                                         println!("Unknown Key: {:?}", id);
                                         continue;
                                     }
-                                }
-                            );
+                                })
+                            ));
                         }
                     }
                 }

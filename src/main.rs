@@ -9,6 +9,7 @@ mod hershey_font;
 mod devices;
 mod keyboard;
 mod wacom;
+mod drawer;
 
 
 fn main() {
@@ -22,7 +23,7 @@ fn main() {
 
     loop {
         while let Some(event) = keyboard.next() {
-            println!("Key: {}", event);
+            println!("Key: {:?}", event);
             // handle_event(event);
         }
     }

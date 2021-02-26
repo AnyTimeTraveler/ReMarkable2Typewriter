@@ -7,11 +7,6 @@ use std::thread::sleep;
 struct Wacom(Vec<evdev::raw::input_event>);
 
 impl Wacom {
-
-    fn put_char(c: char){
-    // draw character here
-    }
-
     fn press_ui_button(&mut self, x: i32, y: i32) {
         self.add_event(EV_KEY, BTN_TOOL_PEN, 1);
         self.add_event(EV_KEY, BTN_TOUCH, 0);
