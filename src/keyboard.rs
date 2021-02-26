@@ -130,6 +130,7 @@ impl Iterator for Keyboard {
                                     Key::KEY_8 => if capital { '*' } else { '8' },
                                     Key::KEY_9 => if capital { '(' } else { '9' },
                                     Key::KEY_0 => if capital { ')' } else { '0' },
+                                    Key::KEY_SPACE => if capital { ' ' } else { ' ' },
                                     Key::KEY_DOT => if capital { '>' } else { '.' },
                                     Key::KEY_COMMA => if capital { '<' } else { ',' },
                                     Key::KEY_SLASH => if capital { '?' } else { '/' },
